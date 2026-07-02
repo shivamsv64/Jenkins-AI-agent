@@ -1,0 +1,63 @@
+# config/config.yaml
+# ─────────────────────────────────────────────────────────────
+# All secrets (URLs, tokens, passwords) are pulled from
+# AWS SSM Parameter Store at runtime — nothing sensitive here.
+# ─────────────────────────────────────────────────────────────
+
+agent:
+  poll_interval_seconds: 60        # Daemon mode: how often to poll Jenkins
+  max_log_chars: 8000              # Trim console logs before sending to LLM
+  lookback_builds: 3               # How many recent builds to inspect per job
+  job_filter: []                    # Leave empty [] to watch ALL jobs
+  ignore_jobs: []                   # Jobs to always skip
+
+jenkins:
+  # Direct Jenkins credentials for local testing.
+  url:        "http://52.206.170.73:8080/"
+  username:   "Shivam-devloper"
+  api_token:  "11d0bf15c5fd41c93c3b8b0176ae5e8685"
+  # SSM parameter fallbacks (optional)
+  ssm_url_param:       "/jenkins-ai-agent/jenkins/url"
+  ssm_username_param:  "/jenkins-ai-agent/jenkins/username"
+  ssm_token_param:     "/jenkins-ai-agent/jenkins/api_token"
+  verify_ssl: false                # Set true if Jenkins has a valid TLS cert
+  connect_timeout: 10
+  read_timeout: 30
+
+bedrock:
+  region: "us-east-1"             # AWS region where Bedrock is enabled
+  model_id: "amazon.nova-pro-v1:0"
+  temperature: 0.2                 # Low = deterministic, good for diagnostics
+  max_tokens: 1024
+  # Uses your local ~/.aws/credentials — no keys needed here
+
+gchat:
+  webhook_url: "https://chat.googleapis.com/v1/spaces/AAQAhWx7LBQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=fGWkMtc1ORCMFIK3ZRzkyD80sMv-2S8_7phd3yE455g"
+  # Webhook parameter fallback (optional)
+  ssm_webhook_param: "/jenkins-ai-agent/gchat/webhook_url"
+  # Public URL of your webhook_server.py (ngrok / ALB / EC2 public IP)
+  # Used for Approve/Reject button callbacks
+  callback_base_url: "http://YOUR_EC2_PUBLIC_IP:5000"
+
+email:
+  enabled: false
+  sender: "shivamsinghverma64@gmail.com"
+  recipient: "shivamsinghverma64@gmail.com"
+  smtp_server: "smtp.gmail.com"
+  smtp_port: 587
+  username_ssm_param: "/jenkins-ai-agent/email/username"
+  password_ssm_param: "/jenkins-ai-agent/email/password"
+
+remediation:
+  # Actions the agent is allowed to perform on Approve
+  allowed_actions:
+    - "retry_build"               # Re-trigger the failed build
+    - "rebuild_with_params"       # Retry with same parameters
+  # If false, Approve just sends a Slack follow-up instead of acting
+  auto_execute: true
+
+logging:
+  level: "INFO"                   # DEBUG | INFO | WARNING | ERROR
+  file: "logs/agent.log"
+  max_bytes: 10485760             # 10 MB
+  backup_count: 5
