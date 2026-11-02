@@ -13,9 +13,9 @@ agent:
 
 jenkins:
   # Direct Jenkins credentials for local testing.
-  url:        "http://52.206.170.73:8080/"
+  url:        "http:/3:8080/"
   username:   "Shivam-devloper"
-  api_token:  "11d0bf15c5fd41c93c3b8b0176ae5e8685"
+  api_token:  "1"
   # SSM parameter fallbacks (optional)
   ssm_url_param:       "/jenkins-ai-agent/jenkins/url"
   ssm_username_param:  "/jenkins-ai-agent/jenkins/username"
@@ -32,7 +32,7 @@ bedrock:
   # Uses your local ~/.aws/credentials — no keys needed here
 
 gchat:
-  webhook_url: "https://chat.googleapis.com/v1/spaces/AAQAhWx7LBQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=fGWkMtc1ORCMFIK3ZRzkyD80sMv-2S8_7phd3yE455g"
+  webhook_url: "
   # Webhook parameter fallback (optional)
   ssm_webhook_param: "/jenkins-ai-agent/gchat/webhook_url"
   # Public URL of your webhook_server.py (ngrok / ALB / EC2 public IP)
@@ -41,8 +41,8 @@ gchat:
 
 email:
   enabled: false
-  sender: "shivamsinghverma64@gmail.com"
-  recipient: "shivamsinghverma64@gmail.com"
+  sender: "shivamsinl.com"
+  recipient: "shivam"
   smtp_server: "smtp.gmail.com"
   smtp_port: 587
   username_ssm_param: "/jenkins-ai-agent/email/username"
